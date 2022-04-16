@@ -1,0 +1,62 @@
+{% extends 'base/base.html' %} {% block content %}
+
+<h1>Consume Items</h1>
+
+<form method="GET" action="{% url 'consume' %}">
+  <input type="text" name="q" placeholder="Search Ingredients" />
+</form>
+<hr />
+
+<div>
+  <form method="POST" action="">
+    {% csrf_token %}
+
+    <table class="table">
+      <tr>
+        <th>Ingredient name</th>
+        <th>Consume</th>
+        <th>Purchased</th>
+        <th>Calories (kcal)</th>
+        <th>Carbs (g)</th>
+        <th>Fat (g)</th>
+        <th>Protein (g)</th>
+        <th>Sodium (mg)</th>
+        <th>Sugar (g)</th>
+        <th>Purchased Date</th>
+      </tr>
+      {% for ingredient in ingredients %} {% if ingredient.amount != 0 %}
+      <tr>
+        <th>
+          <a
+            href="{% url 'add-ingredients' %}?q={{ingredient.ingredient_id}}&amount={{ingredient.amount}}&unit={{ingredient.unit}}"
+            >{{ingredient.name}}</a
+          >
+        </th>
+        <th>
+          <input
+            required
+            type="number"
+            id="amount"
+            name="amount"
+            min="0"
+            max="{{ingredient.amount}}"
+            step="0.1"
+            value="0.0"
+          />{{ingredient.unit}}
+          <input type="hidden" id="id" name="id" value="{{ingredient.id}}" />
+        </th>
+        <th>{{ingredient.amount}} {{ingredient.unit}}</th>
+        <th>{{ingredient.calories}}</th>
+        <th>{{ingredient.carbs}}</th>
+        <th>{{ingredient.fat}}</th>
+        <th>{{ingredient.protein}}</th>
+        <th>{{ingredient.sodium}}</th>
+        <th>{{ingredient.sugar}}</th>
+        <th>{{ingredient.date_purchased}}</th>
+      </tr>
+      {% endif %} {% endfor %}
+    </table>
+    <input type="submit" value="Consume" />
+  </form>
+</div>
+{% endblock content %}
