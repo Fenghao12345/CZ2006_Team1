@@ -1,0 +1,92 @@
+{% extends 'base/base.html' %} {% block content %}
+
+<style>
+  .nutrient-container1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .nutrient-container2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+</style>
+
+<h1><u>{{results.name}}</u></h1>
+<br>
+
+<div>
+  <form method="POST" action="">
+    {% csrf_token %}
+
+    <div>
+      <h2>Purchased quantity</h2>
+      {% if page == "add_ingredients" %}
+      <input
+        required
+        type="number"
+        id="amount"
+        name="amount"
+        min="0"
+        step="0.1"
+        value="100.0"
+      /><select id="units" name="units">
+        {% for unit in units %} {% if unit == 'g' %}
+        <option selected value="{{unit}}">{{unit}}</option>
+        {% else %}
+        <option value="{{unit}}">{{unit}}</option>
+        {% endif %} {% endfor %}
+      </select>
+      {% else %}
+      <h3>{{amount}} {{unit}}</h3>
+      {% endif %}
+    </div>
+
+    <hr />
+
+    <div class="nutrient-container1">
+      <div>
+        {% for nutrient in nutrients1 %}
+        <a class="list-group-item list-group-item-action list-group-item-info">{{nutrient.name}}: {{nutrient.amount}}{{nutrient.unit}}</a>
+        {% endfor %}
+      </div>
+
+      <div>
+        {% for nutrient in nutrients2 %}
+        <a class="list-group-item list-group-item-action list-group-item-info">{{nutrient.name}}: {{nutrient.amount}}{{nutrient.unit}}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="nutrient-container2">
+      <div>
+        {% for nutrient in nutrients3 %}
+
+        <a class="list-group-item list-group-item-action list-group-item-info">{{nutrient.name}}: {{nutrient.amount}}{{nutrient.unit}}</a>
+        {% endfor %}
+      </div>
+
+      <div>
+        {% for nutrient in nutrients4 %}
+
+        <a class="list-group-item list-group-item-action list-group-item-info">{{nutrient.name}}: {{nutrient.amount}}{{nutrient.unit}}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <br>
+
+    {% if page == "add_ingredients" %}
+    <a href="{{request.META.HTTP_REFERER}}">Back</a>
+    <input
+      type="hidden"
+      name="previous"
+      value="{{request.META.HTTP_REFERER}}"
+    />
+    <input type="submit" value="Add" />
+    {% endif %}
+  </form>
+</div>
+
+<br>
+{% endblock content %}
